@@ -113,6 +113,84 @@ processor = MllamaProcessor.from_pretrained(model_id)
 
 ---
 
+## 📁 File Architecture
+
+- Entry & Config
+    - `main.py`: FastAPI bootstrap, sessions, CORS, templates, runs on port 8001
+    - `requirements.txt`: Python dependencies
+    - `.env`: Environment variables (GROQ_API_KEY, MONGODB_URL, DATABASE_NAME, etc.)
+    - `.gitignore`: Excludes secrets, uploads, local artifacts
+
+- Application Modules (`app/`)
+    - `auth/`
+        - `routes.py`: Login, register, session handling
+        - `schemas.py`: Pydantic auth models
+        - `services.py`: Auth business logic
+    - `citizen/`
+        - `routes.py`: Citizen dashboard, new request
+        - `services.py`: Citizen operations
+        - `ai_service.py`: Request AI pipeline orchestration
+        - `api_routes.py`: Citizen-specific API endpoints
+    - `worker/`
+        - `routes.py`: Jobs, accept job, route management
+        - `schemas.py`: Worker and job models
+        - `services.py`: Worker data access and helpers
+    - `shared/`
+        - `database.py`: Motor client, connection, indexes
+        - `mitra_ai_service.py`: GROQ model usage for AI
+        - `bin_service.py`: Bin generation and priority selection
+        - `request_service.py`: Request persistence/utilities
+        - `notification_service.py`: Email/SMS/FCM notifications
+        - `session_manager.py`: Cookie/session helpers
+        - `models.py`, `utils.py`, `config.py`: Common types and helpers
+
+- Templates (`templates/`)
+    - `base.html`: Layout shell
+    - `login.html`, `register.html`, `demo.html`: Auth views
+    - `citizen/`: `dashboard.html`, `new-request.html`, `my_requests.html`, `profile.html`
+    - `worker/`: `jobs.html`, `dashboard.html`, `active-route.html`, `earnings.html`, `profile.html`
+
+- Utilities
+    - `test_fake_requests.py`: Create sample MongoDB data for testing
+
+---
+
+## ▶️ Setup & Run
+
+### 1) Environment
+Create `.env` in the project root:
+
+```
+ENVIRONMENT=development
+MONGODB_URL=mongodb://localhost:27017
+DATABASE_NAME=meri_dharani
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+### 2) Install deps
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3) Start the server
+
+```bash
+python main.py
+```
+
+- App: http://localhost:8001
+- Docs: http://localhost:8001/docs
+- Login: http://localhost:8001/login
+
+### 4) Optional: Seed test data
+
+```bash
+python test_fake_requests.py
+```
+
+---
+
 ## 📊 Platform Workflows
 
 **Citizen Flow**: Register with Google → Snap photo → AI classifies → Worker assigned → Get notified when cleaned
