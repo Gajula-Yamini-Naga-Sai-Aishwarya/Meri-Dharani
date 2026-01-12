@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Environments
+.env
+.venv/
+venv/
+
+# VS Code
+.vscode/
+
+# Node/Frontend artifacts (if any)
+node_modules/
+
+# Local data/uploads
+uploads/
+static/
+
+# OS files
+.DS_Store
+Thumbs.db
